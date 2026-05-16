@@ -34,6 +34,12 @@ public class AudioManager : MonoBehaviour
         musicSlider.onValueChanged.AddListener(ChangeMusicVolume);
         masterSlider.onValueChanged.AddListener(ChangeMasterVolume);
         sfxSlider.onValueChanged.AddListener(ChangeSFXVolume);
+
+        ChangeMusicVolume(musicSlider.value);
+        ChangeMasterVolume(masterSlider.value);
+        ChangeSFXVolume(sfxSlider.value);
+
+        
     }
 
 
