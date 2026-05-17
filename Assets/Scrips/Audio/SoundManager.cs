@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : MonoBehaviour, IDataPersistence
 {
     public static AudioManager instance;
 
@@ -35,11 +35,16 @@ public class AudioManager : MonoBehaviour
         masterSlider.onValueChanged.AddListener(ChangeMasterVolume);
         sfxSlider.onValueChanged.AddListener(ChangeSFXVolume);
 
-        ChangeMusicVolume(musicSlider.value);
-        ChangeMasterVolume(masterSlider.value);
-        ChangeSFXVolume(sfxSlider.value);
-
-        
+        if (PersistenceManager.Instance != null && PersistenceManager.Instance.CurrentData != null)
+        {
+            LoadData(PersistenceManager.Instance.CurrentData);
+        }
+        else
+        {
+            ChangeMusicVolume(musicSlider.value);
+            ChangeMasterVolume(masterSlider.value);
+            ChangeSFXVolume(sfxSlider.value);
+        }
     }
 
 
@@ -94,5 +99,31 @@ public class AudioManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void LoadData(GameData data)
+    {
+        if (data == null || data.settings == null) return;
+
+        float master = data.settings.masterVolume;
+        float music = data.settings.musicVolume;
+        float sfx = data.settings.sfxVolume;
+
+        if (masterSlider != null) masterSlider.value = master;
+        if (musicSlider != null) musicSlider.value = music;
+        if (sfxSlider != null) sfxSlider.value = sfx;
+
+        ChangeMasterVolume(master);
+        ChangeMusicVolume(music);
+        ChangeSFXVolume(sfx);
+    }
+
+    public void SaveData(GameData data)
+    {
+        if (data == null || data.settings == null) return;
+
+        if (masterSlider != null) data.settings.masterVolume = masterSlider.value;
+        if (musicSlider != null) data.settings.musicVolume = musicSlider.value;
+        if (sfxSlider != null) data.settings.sfxVolume = sfxSlider.value;
     }
 }
