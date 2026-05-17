@@ -71,6 +71,16 @@ public class AudioManager : MonoBehaviour, IDataPersistence
         sfxSource.Play();
     }
 
+    public void PlaySfxAtSource(AudioSource source, AudioClip clip)
+    {
+        if (source == null || clip == null)
+            return;
+
+        source.pitch = Random.Range(0.92f, 1.08f);
+
+        source.PlayOneShot(clip);
+    }
+
 
     public void StopMusic()
     { 
